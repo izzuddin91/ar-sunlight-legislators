@@ -35,6 +35,7 @@ class CreateCongressmen < ActiveRecord::Migration
       congressman.string :birthdate
       congressman.integer :state_id
       congressman.integer :party_id
+      congressman.string :type
     end
   end
 end

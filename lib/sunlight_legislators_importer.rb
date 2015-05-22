@@ -1,9 +1,10 @@
 require 'csv'
-# require 'byebug'
+require 'byebug'
 require_relative "../app/models/state.rb"
 
 class SunlightLegislatorsImporter
   def self.import(filename)
+    count = 0
     congressmen_objects = []
     csv = CSV.new(File.open(filename), :headers => true)
     csv.each do |row|
@@ -13,7 +14,12 @@ class SunlightLegislatorsImporter
         hash[field] = value
         # TODO: end
       end
+      hash[:party] = Party.find_by(party_name: hash[:party])
+      hash[:state] = State.find_by(name: hash[:state])
+      # hash[:title] == "Sen" ? hash[:type] = "Senator" : hash[:type] = "Representative"
       congressmen_objects << Congressman.create(hash)
+      count += 1
+      p count if count % 100 == 0
     end
     congressmen_objects
   end
